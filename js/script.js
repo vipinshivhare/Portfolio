@@ -105,9 +105,9 @@ document.addEventListener("DOMContentLoaded", function () {
             message: message
         }, "o5jFZMgba0bF6_H9O")
         .then(function (response) {
-            alert("Message Sent Successfully! ✅");
+            alert("Message Sent Successfully! ");
         }, function (error) {
-            alert("Failed to Send Message ❌: " + error.text);
+            alert("Failed to Send Message : " + error.text);
         });
 
         // Reset form fields
