@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let email_subject = document.querySelector("input[placeholder='Email Subject']").value;
         let message = document.querySelector("textarea").value;
 
-        // Sending email using Email.js
+        // Sending email 
         
         emailjs.send("service_9z1hn79", "template_05dz44q", {
             user_name: user_name,
