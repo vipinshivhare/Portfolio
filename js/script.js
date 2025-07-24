@@ -1,3 +1,54 @@
+
+/*========== Notification ==========*/
+function showNotification(message, type = "success") {
+    const container = document.getElementById("notification-container");
+    const notification = document.createElement("div");
+    notification.textContent = message;
+
+    // Modern design
+    notification.style.padding = "16px 28px";
+    notification.style.marginTop = "15px";
+    notification.style.borderRadius = "8px";
+    notification.style.color = "#fff";
+    notification.style.fontWeight = "600";
+    notification.style.fontSize = "16px";
+    notification.style.letterSpacing = "0.5px";
+    notification.style.boxShadow = "0 6px 12px rgba(0,0,0,0.25)";
+    notification.style.transition = "all 0.4s ease";
+    notification.style.opacity = "0.95";
+    notification.style.backdropFilter = "blur(3px)";
+    notification.style.maxWidth = "320px";
+    notification.style.lineHeight = "1.4";
+
+    // Color theme
+    if (type === "success") {
+        notification.style.background = "linear-gradient(135deg,#4caf50,#43a047)";
+    } else if (type === "error") {
+        notification.style.background = "linear-gradient(135deg,#f44336,#d32f2f)";
+    } else if (type === "warning") {
+        notification.style.background = "linear-gradient(135deg,#ff9800,#f57c00)";
+    }
+
+    // Hover effect
+    notification.addEventListener("mouseenter", () => {
+      notification.style.transform = "scale(1.03)";
+    });
+    notification.addEventListener("mouseleave", () => {
+      notification.style.transform = "scale(1)";
+    });
+
+    container.appendChild(notification);
+
+    // Auto remove
+    setTimeout(() => {
+        notification.style.opacity = "0";
+        notification.style.transform = "translateX(100%)";
+        setTimeout(() => container.removeChild(notification), 400);
+    }, 4000);
+}
+
+
+
 /*========== menu icon navbar ==========*/
 let menuIcon = document.querySelector('#menu-icon');
 let navbar = document.querySelector('.navbar');
@@ -88,15 +139,27 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("form").addEventListener("submit", function (e) {
         e.preventDefault(); // Prevent form default submission
 
-        // Form fields data
-        let user_name = document.querySelector("input[placeholder='Full Name']").value;
-        let user_email = document.querySelector("input[placeholder='Email Address']").value;
-        let user_mobile = document.querySelector("input[placeholder='Mobile Number']").value;
-        let email_subject = document.querySelector("input[placeholder='Email Subject']").value;
-        let message = document.querySelector("textarea").value;
+        // Get form field values
+        let user_name = document.querySelector("input[placeholder='Full Name']").value.trim();
+        let user_email = document.querySelector("input[placeholder='Email Address']").value.trim();
+        let user_mobile = document.querySelector("input[placeholder='Mobile Number']").value.trim();
+        let email_subject = document.querySelector("input[placeholder='Email Subject']").value.trim();
+        let message = document.querySelector("textarea").value.trim();
 
-        // Sending email 
-        
+        // ✅ Validation: check if any field is empty
+        if (!user_name || !user_email || !user_mobile || !email_subject || !message) {
+            showNotification("⚠️ Please fill all fields before submitting.");
+            return; // stop further execution
+        }
+
+        // ✅ Optionally, validate email format (basic check)
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(user_email)) {
+            showNotification("⚠️ Please enter a valid email address.");
+            return;
+        }
+
+        // ✅ Now send email
         emailjs.send("service_9z1hn79", "template_05dz44q", {
             user_name: user_name,
             user_email: user_email,
@@ -105,12 +168,12 @@ document.addEventListener("DOMContentLoaded", function () {
             message: message
         }, "o5jFZMgba0bF6_H9O")
         .then(function (response) {
-            alert("Message Sent Successfully! ");
+            showNotification("✅ Message Sent Successfully!");
         }, function (error) {
-            alert("Failed to Send Message : " + error.text);
+            showNotification("❌ Failed to Send Message: " + error.text);
         });
 
-        // Reset form fields
+        // ✅ Reset form fields
         document.querySelector("form").reset();
     });
 });
