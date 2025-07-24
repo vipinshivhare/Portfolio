@@ -118,10 +118,14 @@ var swiper = new Swiper(".mySwiper", {
 /*========== dark light mode ==========*/
 let darkModeIcon = document.querySelector('#darkMode-icon');
 
+document.body.classList.add("dark-mode");
+darkModeIcon.classList.add("bx-sun");
+
 darkModeIcon.onclick = () => {
     darkModeIcon.classList.toggle('bx-sun');
     document.body.classList.toggle('dark-mode');
 };
+
 
 
 /*========== scroll reveal ==========*/

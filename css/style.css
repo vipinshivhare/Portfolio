@@ -940,3 +940,30 @@ span {
 img {
     border-radius: 20px;
 }
+
+/* Normal light mode (optional, agar chahiye to) */
+.contact form input,
+.contact form textarea {
+  background: #f9f9f9;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Dark mode me override */
+body.dark-mode .contact form input,
+body.dark-mode .contact form textarea {
+  background: rgba(255, 255, 255, 0.1);  /* glassy light background */
+  color: #fff;                           /* text white */
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Placeholder color dark mode me thoda halka */
+body.dark-mode .contact form input::placeholder,
+body.dark-mode .contact form textarea::placeholder {
+  color: rgba(255,255,255,0.6);
+}
