@@ -21,13 +21,19 @@ function showNotification(message, type = "success") {
     notification.style.lineHeight = "1.4";
 
     // Color theme
-    if (type === "success") {
-        notification.style.background = "linear-gradient(135deg,#4caf50,#43a047)";
-    } else if (type === "error") {
-        notification.style.background = "linear-gradient(135deg,#f44336,#d32f2f)";
-    } else if (type === "warning") {
-        notification.style.background = "linear-gradient(135deg,#ff9800,#f57c00)";
-    }
+ if (type === "success") {
+    // green gradient glassy
+    notification.style.background = "rgba(76, 175, 80, 0.6)";
+    notification.style.backdropFilter = "blur(6px)";
+    notification.style.border = "1px solid rgba(76, 175, 80, 0.3)";
+} else if (type === "error" || type === "warning") {
+    // light red glassy
+    notification.style.background = "rgba(255, 99, 99, 0.6)";
+    notification.style.backdropFilter = "blur(6px)";
+    notification.style.border = "1px solid rgba(255, 99, 99, 0.3)";
+}
+
+
 
     // Hover effect
     notification.addEventListener("mouseenter", () => {
@@ -135,45 +141,39 @@ ScrollReveal().reveal('.home-content h3, .home-content p, .about-content', { ori
 // ===============Email sending logic==========
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Form submit event listener
     document.querySelector("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Prevent form default submission
+        e.preventDefault();
 
-        // Get form field values
         let user_name = document.querySelector("input[placeholder='Full Name']").value.trim();
         let user_email = document.querySelector("input[placeholder='Email Address']").value.trim();
         let user_mobile = document.querySelector("input[placeholder='Mobile Number']").value.trim();
         let email_subject = document.querySelector("input[placeholder='Email Subject']").value.trim();
         let message = document.querySelector("textarea").value.trim();
 
-        // ✅ Validation: check if any field is empty
         if (!user_name || !user_email || !user_mobile || !email_subject || !message) {
-            showNotification("⚠️ Please fill all fields before submitting.");
-            return; // stop further execution
-        }
-
-        // ✅ Optionally, validate email format (basic check)
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(user_email)) {
-            showNotification("⚠️ Please enter a valid email address.");
+            showNotification("⚠️ Please fill all fields before submitting.", "error"); // 🔴 RED
             return;
         }
 
-        // ✅ Now send email
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(user_email)) {
+            showNotification(" Please enter a valid email address.", "error");
+            return;
+        }
+
         emailjs.send("service_9z1hn79", "template_05dz44q", {
-            user_name: user_name,
-            user_email: user_email,
-            user_mobile: user_mobile,
-            email_subject: email_subject,
-            message: message
+            user_name,
+            user_email,
+            user_mobile,
+            email_subject,
+            message
         }, "o5jFZMgba0bF6_H9O")
         .then(function (response) {
-            showNotification("✅ Message Sent Successfully!");
+            showNotification(" Message Sent Successfully!", "success"); 
         }, function (error) {
-            showNotification("❌ Failed to Send Message: " + error.text);
+            showNotification("❌ Failed to Send Message: " + error.text, "error"); 
         });
 
-        // ✅ Reset form fields
         document.querySelector("form").reset();
     });
 });
